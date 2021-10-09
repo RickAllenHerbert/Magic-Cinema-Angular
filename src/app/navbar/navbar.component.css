@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+mat-sidenav-container {
+  height:100%;
+}
+
+mat-sidenav, mat-sidenav-content {
+  padding: 16px;
+}
+
+mat-sidenav {
+  background-color: lightcoral;
+  width: 200px;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+.sidebar .text {
+  color: white;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 65px;
+  text-align: center;
+  background: #1e1e1e;
+  letter-spacing: 1px;
+}
+  

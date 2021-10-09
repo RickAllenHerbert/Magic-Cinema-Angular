@@ -1,0 +1,149 @@
+<mat-card>
+
+    <mat-card-title-group>
+        <mat-card-title>EMPLOYEE MANAGEMENT</mat-card-title>
+        <button mat-mini-fab class="align-right" (click)="open(content)" id="addButton">
+            <mat-icon>add</mat-icon>
+        </button>
+    </mat-card-title-group>
+    <mat-card-content>
+        <div class="search-div">
+            <mat-form-field class="search-form-field" flaotlevel="never">
+                <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+                    <mat-icon>close</mat-icon>
+                </button>    
+            </mat-form-field>
+        </div>
+        <div class="mat-elevated-z8">
+            <mat-table [dataSource]="listData" matSort>
+
+                <ng-container matColumnDef="ID">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.employeeNumber}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="USERNAME">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>USERNAME</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.username}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="NAME">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>NAME</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.name}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="SURNAME">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>SURNAME</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.surname}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="EMAIL">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>EMAIL</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.email}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="DATE CREATED">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>DATE CREATED</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.dateCreated}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="PASSWORD">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>PASSWORD</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.password}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="ROLE">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>ROLE</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.role}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <button mat-icon-button><mat-icon>launch</mat-icon></button>
+                        <button mat-icon-button color="warm"><mat-icon>delete_outline</mat-icon></button>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="loading">
+                    <mat-footer-cell *matFooterCellDef colspan="6">
+                        Loading data...
+                    </mat-footer-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="noData">
+                    <mat-footer-cell *matFooterCellDef colspan="6">
+                        No data...
+                    </mat-footer-cell>
+                </ng-container>
+
+                
+
+                <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayColumns;"></mat-row>
+                <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':listData!=null}"></mat-footer-row>
+                <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(listData!=null && listData.data.length==0)}"></mat-footer-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5"></mat-paginator>
+        </div>
+    </mat-card-content>
+
+
+
+    <!--MODEL DATA (POPUP)-->
+    <ng-template #content let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Add New Employee</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-group">
+                  <input id="username" name="username" class="form-control" ngModel>
+                </div>
+              </div>
+            <div class="form-group">
+                <label for="firstname">Firstname</label>
+                <div class="input-group">
+                  <input id="firstname" name="firstname" class="form-control" ngModel>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="surname">Surname</label>
+                <div class="input-group">
+                  <input id="surname" name="surname" class="form-control" ngModel>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <div class="input-group">
+                  <input id="email" name="email" class="form-control" ngModel>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-group">
+                  <input id="password" name="password" class="form-control" ngModel>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="role">Role</label>
+                <div class="input-group">
+                  <input id="role" name="role" class="form-control" ngModel>
+                </div>
+              </div>
+              
+          </form>
+        </div>
+        <div class="modal-footer">
+            <button data-dismiss="modal" class="btn btn-success">Submit</button>
+            <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')">Cancel</button>
+        </div>
+      </ng-template>
+</mat-card>
+

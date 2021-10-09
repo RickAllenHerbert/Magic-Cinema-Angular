@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import {Employee} from "./employee"; 
+import { LoginService } from './login/login.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent{
   title = 'magic-cinema-angular';
+
 }
