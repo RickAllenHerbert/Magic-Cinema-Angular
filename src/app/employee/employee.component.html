@@ -223,7 +223,7 @@
 
           <div class="modal-footer">
             <button data-dismiss="modal" class="btn btn-success"
-              (click)="onUpdateEmployee(simpleForm.value)">Update</button>
+              (click)="onUpdateEmployee(simpleForm.value); modal.close('Update button clicked')">Update</button>
             <button type="button" class="btn btn-secondary"
               (click)="modal.close('Cancel button clicked')">Cancel</button>
           </div>

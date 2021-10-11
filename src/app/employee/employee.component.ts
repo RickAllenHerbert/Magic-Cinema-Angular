@@ -83,7 +83,6 @@ export class EmployeeComponent implements OnInit {
   }
 
   public getEmployeeById(employeeNumber: string) {
-    console.log("This is the ID that is being given in the function " + employeeNumber);
     this.employeeService.getEmployeeById(employeeNumber).subscribe(
       (response: Employee) => {
         this.editEmployee.employeeNumber = response.employeeNumber;
@@ -111,7 +110,6 @@ export class EmployeeComponent implements OnInit {
       if(result == "true") {
         this.employeeService.deleteEmployee(employeeNumber).subscribe(
           (response: void) => {
-            console.log(response);
             this.toastr.success('employee with id ('+employeeNumber +') has been successfully deleted.', 'Delete employee');
             this.getEmployees();
           },
@@ -151,7 +149,6 @@ export class EmployeeComponent implements OnInit {
       };
       this.employeeService.addEmployee(employee).subscribe(
         (response: Employee) => {
-          console.log(response);
           this.toastr.success(username + ' has successfully been saved.', 'Adding new employee');
           this.getEmployees();
         },
@@ -173,14 +170,6 @@ export class EmployeeComponent implements OnInit {
     this.listData.filter = this.searchKey.trim().toLowerCase();
   }
 
-  open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
   public onOpenModal(employee: Employee, mode: string, content): void {
     const container = document.getElementById('container');
     const button = document.createElement('button');
@@ -199,7 +188,6 @@ export class EmployeeComponent implements OnInit {
     }
     if(mode == 'edit') {
       var employeeNumber = employee.employeeNumber;
-      console.log(employeeNumber);
       this.getEmployeeById(employeeNumber);
       button.setAttribute('data-target', '#updateEmployeeModal');
 
@@ -216,11 +204,12 @@ export class EmployeeComponent implements OnInit {
   onUpdateEmployee(employee: Employee): void {
     this.employeeService.updateEmployee(employee).subscribe(
       (response: Employee) => {
-        console.log(response);
+        this.toastr.success(employee.username + ' has successfully been updated.', 'Updating an employee');
         this.getEmployees();
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
+        this.toastr.error('An error occured communicating with the server!', 'Updating an employee');
       }
     )
   }
