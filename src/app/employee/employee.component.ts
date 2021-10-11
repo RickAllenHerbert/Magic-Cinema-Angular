@@ -13,6 +13,9 @@ import { Role } from '../role';
 import { ToastrModule } from 'ngx-toastr';
 import { ToastrService } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DialogService } from '../service/dialog.service';
+import { DialogConfirmationComponent } from '../dialog-confirmation/dialog-confirmation.component';
+
 
 
 @Component({
@@ -25,6 +28,17 @@ export class EmployeeComponent implements OnInit {
 
   public employees: Employee[] = [];
   public employeeRoles: Role[] = [];
+  public editEmployee: Employee = {
+    employeeNumber: '',
+    username: '',
+    name: '',
+    surname: '',
+    email: '',
+    dateCreated: '',
+    password: '',
+    role: '',
+    imagePath: ''
+  };
   listData: MatTableDataSource<any> = new MatTableDataSource();
   displayColumns: string[] = ['ID', 'USERNAME', 'NAME', 'SURNAME', 'EMAIL', 'DATE CREATED', 'PASSWORD', 'ROLE', 'actions'];
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -32,7 +46,7 @@ export class EmployeeComponent implements OnInit {
   searchKey: string;
   closeResult: string;
 
-  constructor(private employeeService: EmployeeService, private dialog: MatDialog, private modalService: NgbModal, private toastr: ToastrService) { }
+  constructor(private employeeService: EmployeeService, private dialog: MatDialog, private modalService: NgbModal, private toastr: ToastrService, private dialogService: DialogService) { }
 
   ngOnInit() {
     this.getEmployees();
@@ -68,6 +82,50 @@ export class EmployeeComponent implements OnInit {
     );
   }
 
+  public getEmployeeById(employeeNumber: string) {
+    console.log("This is the ID that is being given in the function " + employeeNumber);
+    this.employeeService.getEmployeeById(employeeNumber).subscribe(
+      (response: Employee) => {
+        this.editEmployee.employeeNumber = response.employeeNumber;
+        this.editEmployee.username = response.username;
+        this.editEmployee.name = response.name;
+        this.editEmployee.surname = response.surname;
+        this.editEmployee.email = response.email;
+        this.editEmployee.password = response.password;
+        this.editEmployee.role = response.role;
+      },
+
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+
+
+  public deleteRecord(val) {
+    var employeeNumber = val.employeeNumber;
+
+    let dialogRef = this.dialog.open(DialogConfirmationComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == "true") {
+        this.employeeService.deleteEmployee(employeeNumber).subscribe(
+          (response: void) => {
+            console.log(response);
+            this.toastr.success('employee with id ('+employeeNumber +') has been successfully deleted.', 'Delete employee');
+            this.getEmployees();
+          },
+          (error: HttpErrorResponse) => {
+            alert(error.message);
+            this.toastr.error('An error occured communicating with the server!', 'Delete employee');
+          }
+    
+        );
+      }
+    })
+  }
+
+
   public saveEmployee(val) {
     var username = val.username;
     var firstname = val.firstname;
@@ -95,6 +153,7 @@ export class EmployeeComponent implements OnInit {
         (response: Employee) => {
           console.log(response);
           this.toastr.success(username + ' has successfully been saved.', 'Adding new employee');
+          this.getEmployees();
         },
         (error: HttpErrorResponse) => {
           alert(error.message);
@@ -120,6 +179,50 @@ export class EmployeeComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  public onOpenModal(employee: Employee, mode: string, content): void {
+    const container = document.getElementById('container');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.style.display = 'none';
+    button.setAttribute('data-toggle', 'modal');
+
+    if(mode == 'add') {
+      button.setAttribute('data-target', '#addEmployeeModal');
+
+      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
+    if(mode == 'edit') {
+      var employeeNumber = employee.employeeNumber;
+      console.log(employeeNumber);
+      this.getEmployeeById(employeeNumber);
+      button.setAttribute('data-target', '#updateEmployeeModal');
+
+
+
+      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
+  }
+
+  onUpdateEmployee(employee: Employee): void {
+    this.employeeService.updateEmployee(employee).subscribe(
+      (response: Employee) => {
+        console.log(response);
+        this.getEmployees();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
   }
   
   private getDismissReason(reason: any): string {

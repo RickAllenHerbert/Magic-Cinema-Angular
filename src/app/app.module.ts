@@ -28,6 +28,7 @@ import { MatDialogModule} from '@angular/material/dialog';
 import { PopupComponent } from './employee/popup/popup.component';
 import { EmployeeService } from './employee/employee.service';
 import { ToastrModule } from 'ngx-toastr';
+import { DialogConfirmationComponent } from './dialog-confirmation/dialog-confirmation.component';
 
 
 
@@ -38,7 +39,8 @@ import { ToastrModule } from 'ngx-toastr';
     RegistrationComponent,
     EmployeeComponent,
     NavbarComponent,
-    PopupComponent
+    PopupComponent,
+    DialogConfirmationComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +66,6 @@ import { ToastrModule } from 'ngx-toastr';
   ],
   providers: [LoginService, EmployeeService],
   bootstrap: [AppComponent],
-  entryComponents: [PopupComponent]
+  entryComponents: [PopupComponent, DialogConfirmationComponent]
 })
 export class AppModule { }
