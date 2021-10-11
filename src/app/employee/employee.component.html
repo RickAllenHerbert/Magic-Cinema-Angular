@@ -100,7 +100,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form>
+          <form #simpleForm="ngForm" (ngSubmit)="saveEmployee(simpleForm.value)">
             <div class="form-group">
                 <label for="username">Username</label>
                 <div class="input-group">
@@ -134,16 +134,21 @@
               <div class="form-group">
                 <label for="role">Role</label>
                 <div class="input-group">
-                  <input id="role" name="role" class="form-control" ngModel>
+                  <select name="role" id="role" class="form-control" ngModel>
+                    <option *ngFor="let currentRole of employeeRoles; let i = index " [value]="employeeRoles[i].id">
+                      {{employeeRoles[i].id + " " + employeeRoles[i].title}}
+                    </option>
+                  </select>
                 </div>
               </div>
               
+              <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-secondary" (click)="modal.close('Cancel button clicked')">Cancel</button>
+            </div>
           </form>
         </div>
-        <div class="modal-footer">
-            <button data-dismiss="modal" class="btn btn-success">Submit</button>
-            <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')">Cancel</button>
-        </div>
+        
       </ng-template>
 </mat-card>
 

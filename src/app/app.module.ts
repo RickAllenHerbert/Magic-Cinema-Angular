@@ -27,6 +27,7 @@ import { MatRippleModule} from '@angular/material/core';
 import { MatDialogModule} from '@angular/material/dialog';
 import { PopupComponent } from './employee/popup/popup.component';
 import { EmployeeService } from './employee/employee.service';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -58,7 +59,8 @@ import { EmployeeService } from './employee/employee.service';
     MatFormFieldModule,
     MatInputModule,
     MatRippleModule,
-    MatDialogModule
+    MatDialogModule,
+    ToastrModule.forRoot()
   ],
   providers: [LoginService, EmployeeService],
   bootstrap: [AppComponent],
